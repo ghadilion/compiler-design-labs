@@ -1,0 +1,21 @@
+#ifndef COLORS
+#define COLOR_BEGIN     "\033["
+#define COLOR_END       "m"
+#define RESET           ";0"
+#define BOLD_ON         ";1"
+#define UNDERLINE_ON    ";4"
+#define ITALICS_ON	";3"
+#define BOLD_OFF        ";21"
+#define UNDERLINE_OFF   ";24"
+#define FG              ";3"
+#define BG              ";4"
+#define BLACK           "0"
+#define RED             "1"
+#define GREEN           "2"
+#define YELLOW          "3"
+#define BLUE            "4"
+#define MAGENTA         "5"
+#define CYAN            "6"
+#define WHITE           "7"
+#endif
+

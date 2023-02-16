@@ -1,0 +1,12 @@
+
+^@ WRONG INPUT 
+
+fizz_buzz<void>() {
+  with(i<int> = 1) loop until(i == 16) update(i += 1) {
+    if(i%3 == 0)
+      print("FIZZ");
+    if(i%5 == 0)
+      print("BUZZ");
+    print("\n");
+  }
+}
