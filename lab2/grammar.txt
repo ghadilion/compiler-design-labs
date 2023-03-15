@@ -75,7 +75,7 @@ constant : integer_constant
              | floating_constant
 
 expression : assignment_expression
-               | expression , assignment_expression
+               | expression COMMA assignment_expression
 
 assignment_expression : unary_expression assignment_operator assignment_expression
 
@@ -105,10 +105,10 @@ init_declarator : declarator
 
 initializer : assignment_expression
                 | { initializer_list }
-                | { initializer_list , }
+                | { initializer_list COMMA }
 
 initializer_list : initializer
-                     | initializer_list , initializer
+                     | initializer_list COMMA initializer
 
 compound_statement : LBRACE { declaration }* { statement }* RBRACE
 
