@@ -1,160 +1,131 @@
-<translation-unit> ::= {<external-declaration>}*
+translation_unit : {external_declaration}*
 
-<external-declaration> ::= <function-definition>
-                         | <declaration>
+external_declaration : function_definition
+                         | declaration
 
-<function-definition> ::= <type-specifier> <declarator> {<declaration>}* <compound-statement>
+function_definition : type_specifier declarator {declaration}* compound_statement
 
-<type-specifier> ::= void
-                   | char
-                   | int
-                   | float
-                   | <struct-or-union-specifier>
-                   | <identifier>
+type_specifier : VOID
+                   | CHAR
+                   | INT
+                   | FLOAT
+                   | STRING
+                   | DATATYPE
+                   | BOOL
 
-<struct-or-union-specifier> ::= <struct-or-union> <identifier> { {<struct-declaration>}+ }
-                              | <struct-or-union> { {<struct-declaration>}+ }
-                              | <struct-or-union> <identifier>
+declarator : {pointer}? direct_declarator
 
-<struct-or-union> ::= struct
+pointer : DOT {pointer}?
 
-<struct-declaration> ::= {<type-specifier>}* <struct-declarator-list>
+direct_declarator : identifier
+                      | ( declarator )
+                      | direct_declarator [ {constant_expression}? ]
+                      | direct_declarator ( parameter_list )
+                      | direct_declarator ( {identifier}* )
 
-<struct-declarator-list> ::= <struct-declarator>
-                           | <struct-declarator-list> , <struct-declarator>
+constant_expression : logical_or_expression
 
-<struct-declarator> ::= <declarator>
-                      | <declarator> : <constant-expression>
-                      | : <constant-expression>
+logical_or_expression : logical_and_expression
+                          | logical_or_expression OR logical_and_expression
 
-<declarator> ::= {<pointer>}? <direct-declarator>
+logical_and_expression : equality_expression
+                           | logical_and_expression AND equality_expression
 
-<pointer> ::= * {<pointer>}?
+equality_expression : relational_expression
+                        | equality_expression EQUALS relational_expression
+                        | equality_expression NEQUALS relational_expression
 
-<direct-declarator> ::= <identifier>
-                      | ( <declarator> )
-                      | <direct-declarator> [ {<constant-expression>}? ]
-                      | <direct-declarator> ( <parameter-list> )
-                      | <direct-declarator> ( {<identifier>}* )
+relational_expression : additive_expression
+                          | relational_expression LT additive_expression
+                          | relational_expression GT additive_expression
+                          | relational_expression LTE additive_expression
+                          | relational_expression GTE additive_expression
 
-<constant-expression> ::= <logical-or-expression>
+additive_expression : multiplicative_expression
+                        | additive_expression PLUS multiplicative_expression
+                        | additive_expression MINUS multiplicative_expression
 
-<logical-or-expression> ::= <logical-and-expression>
-                          | <logical-or-expression> || <logical-and-expression>
+multiplicative_expression : cast_expression
+                              | multiplicative_expression MUL cast_expression
+                              | multiplicative_expression DIV cast_expression
+                              | multiplicative_expression MOD cast_expression
 
-<logical-and-expression> ::= <equality-expression>
-                           | <logical-and-expression> && <equality-expression>
+cast_expression : unary_expression
+                    | ( type_name ) cast_expression
 
-<equality-expression> ::= <relational-expression>
-                        | <equality-expression> == <relational-expression>
-                        | <equality-expression> != <relational-expression>
+unary_expression : postfix_expression
+                     | DECR unary_expression
+                     | INCR unary_expression
+                     | unary_operator cast_expression
 
-<relational-expression> ::= <additive-expression>
-                          | <relational-expression> < <additive-expression>
-                          | <relational-expression> > <additive-expression>
-                          | <relational-expression> <= <additive-expression>
-                          | <relational-expression> >= <additive-expression>
+postfix_expression : primary_expression
+                       | postfix_expression [ expression ]
+                       | postfix_expression ( {assignment_expression}* )
+                       | postfix_expression COLON identifier
+                       | postfix_expression INCR
+                       | postfix_expression DECR
 
-<additive-expression> ::= <multiplicative-expression>
-                        | <additive-expression> + <multiplicative-expression>
-                        | <additive-expression> - <multiplicative-expression>
+primary_expression : identifier
+                       | constant
+                       | string
+                       | ( expression )
 
-<multiplicative-expression> ::= <cast-expression>
-                              | <multiplicative-expression> * <cast-expression>
-                              | <multiplicative-expression> / <cast-expression>
-                              | <multiplicative-expression> % <cast-expression>
+constant : integer_constant
+             | character_constant
+             | floating_constant
 
-<cast-expression> ::= <unary-expression>
-                    | ( <type-name> ) <cast-expression>
+expression : assignment_expression
+               | expression , assignment_expression
 
-<unary-expression> ::= <postfix-expression>
-                     | ++ <unary-expression>
-                     | -- <unary-expression>
-                     | <unary-operator> <cast-expression>
-                     | sizeof <unary-expression>
-                     | sizeof <type-name>
+assignment_expression : unary_expression assignment_operator assignment_expression
 
-<postfix-expression> ::= <primary-expression>
-                       | <postfix-expression> [ <expression> ]
-                       | <postfix-expression> ( {<assignment-expression>}* )
-                       | <postfix-expression> . <identifier>
-                       | <postfix-expression> -> <identifier>
-                       | <postfix-expression> ++
-                       | <postfix-expression> --
+assignment_operator : ASSIGN
+                        | MULEQUALS
+                        | DIVEQUALS
+                        | MODEQUALS
+                        | PLUSEQUALS
+                        | MINUSEQUALS
 
-<primary-expression> ::= <identifier>
-                       | <constant>
-                       | <string>
-                       | ( <expression> )
+unary_operator : MUL
+                   | PLUS
+                   | MINUS
+                   | ~ 
+                   | NOT
 
-<constant> ::= <integer-constant>
-             | <character-constant>
-             | <floating-constant>
+parameter_list : parameter_declaration
+                   | parameter_list COMMA parameter_declaration
 
-<expression> ::= <assignment-expression>
-               | <expression> , <assignment-expression>
+parameter_declaration : type_specifier declarator
+                          | type_specifier
 
-<assignment-expression> ::= <unary-expression> <assignment-operator> <assignment-expression>
+declaration :  type_specifier {init_declarator}* SEMICOLON 
 
-<assignment-operator> ::= =
-                        | *=
-                        | /=
-                        | %=
-                        | +=
-                        | -=
+init_declarator : declarator
+                    | declarator EQUALS initializer
 
-<unary-operator> ::= &
-                   | *
-                   | +
-                   | -
-                   | ~
-                   | !
+initializer : assignment_expression
+                | { initializer_list }
+                | { initializer_list , }
 
-<type-name> ::= {<type-specifier>}+ {<abstract-declarator>}?
+initializer_list : initializer
+                     | initializer_list , initializer
 
-<parameter-list> ::= <parameter-declaration>
-                   | <parameter-list> , <parameter-declaration>
+compound_statement : LBRACE { declaration }* { statement }* RBRACE
 
-<parameter-declaration> ::= {<type-specifier>}+ <declarator>
-                          | {<type-specifier>}+ <abstract-declarator>
-                          | {<type-specifier>}+
+statement : expression_statement
+              | compound_statement
+              | selection_statement
+              | iteration_statement
+              | jump_statement
 
-<abstract-declarator> ::= <pointer>
-                        | <pointer> <direct-abstract-declarator>
-                        | <direct-abstract-declarator>
+expression_statement : {expression}? SEMICOLON
 
-<direct-abstract-declarator> ::=  ( <abstract-declarator> )
-                               | {<direct-abstract-declarator>}? [ {<constant-expression>}? ]
-                               | {<direct-abstract-declarator>}? ( {<parameter-list>}? )
+selection_statement : IF ( expression ) statement
+                        | IF ( expression ) statement ELSE statement
 
-<declaration> ::=  <type-specifier> {<init-declarator>}* SEMICOLON 
+iteration_statement : { WITH LPAREN expression RPAREN }? LOOP { UNTIL LPAREN expression RPAREN }? { UPDATE LPAREN expression RPAREN }? 
+                            LBRACE { statement }? RBRACE
 
-<init-declarator> ::= <declarator>
-                    | <declarator> = <initializer>
-
-<initializer> ::= <assignment-expression>
-                | { <initializer-list> }
-                | { <initializer-list> , }
-
-<initializer-list> ::= <initializer>
-                     | <initializer-list> , <initializer>
-
-<compound-statement> ::= LBRACE { <declaration> }* { <statement> }* RBRACE
-
-<statement> ::= <expression-statement>
-              | <compound-statement>
-              | <selection-statement>
-              | <iteration-statement>
-              | <jump-statement>
-
-<expression-statement> ::= {<expression>}? SEMICOLON
-
-<selection-statement> ::= IF ( <expression> ) <statement>
-                        | IF ( <expression> ) <statement> ELSE <statement>
-
-<iteration-statement> ::= { WITH LPAREN <expression> RPAREN }? LOOP { UNTIL LPAREN <expression> RPAREN }? { UPDATE LPAREN <expression> RPAREN }? 
-                            LBRACE { <statement> }? RBRACE
-
-<jump-statement> ::= SKIP SEMICOLON
+jump_statement : SKIP SEMICOLON
                    | EXIT SEMICOLON
-                   | RETURN {<expression>}? SEMICOLON
+                   | RETURN {expression}? SEMICOLON
