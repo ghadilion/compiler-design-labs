@@ -14,7 +14,7 @@
 
 %%
 
-[\t\r\f]+
+[\t\r\f]+|[#].*\r
 
 
 "<bool>"				{  return BOOL; }
