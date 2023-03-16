@@ -1,0 +1,26 @@
+foo<int> = [1,2,3];
+bar<int> = 10;
+
+node<datatype>(newData<int>) {
+    data<int> = 0;
+    data3<int> = 0;
+
+    func1<void> (test<int>){a+=1;}
+}
+
+function1<int> (param<int>){
+    variable<int> = 2;
+    return variable;
+}
+
+.test<int> = null;
+
+if(bar < 10){
+    bar+=1;
+}
+
+with(i<int> = 2) loop until(i <= n) update(i++) {
+        temp<int> = a+b;
+        a = b;
+        b = temp;
+}
