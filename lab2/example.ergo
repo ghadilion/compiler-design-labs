@@ -1,0 +1,44 @@
+# array and variable initialization
+
+foo<int> = [1,2,3];
+bar<int> = 10;
+
+# class definition
+
+node<datatype>(newData<int>) {
+    # class data members definition
+ 	data<int> = 0;
+    data3<int> = 0;
+
+	# class method definition
+
+    func1<void> (test<int>) {
+		data = test;
+		a += 1;
+    }
+}
+
+function1<int> (param<int>){
+    variable<int> = 2;
+    return variable;
+}
+
+.test<int> = null;
+
+
+
+if(bar < 10){
+    bar+=1;
+}
+
+with(i<int> = 2) loop until(i <= n) update(i++) {
+        temp<int> = a+b;
+        a = b;
+        b = temp;
+}
+
+# The following line is an error but is commented out
+# hence the it parses without error
+
+
+#with (with(i<int>=1)) loop {}
