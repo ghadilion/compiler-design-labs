@@ -1,11 +1,11 @@
 translation_unit : external_declaration
                 |  external_declaration translation_unit
-;
+
 external_declaration : function_definition
                          | declaration
-;
+
 function_definition :  declarator type_specifier compound_statement
-;
+
 type_specifier : VOID
                    | CHAR
                    | INT
@@ -13,121 +13,119 @@ type_specifier : VOID
                    | STRING
                    | DATATYPE
                    | BOOL
-;
-declarator : pointer direct_declarator
-            | direct_declarator
-;
-pointer : DOT 
-        | DOT pointer
-;
-direct_declarator : ID
+
+direct_declarator : identifier
                       | LPAREN declarator RPAREN
                       | direct_declarator LBOX RBOX 
                       | direct_declarator LBOX constant_expression RBOX
                       | direct_declarator LPAREN parameter_list RPAREN
-;
+                      | direct_declarator LPAREN {identifier}* RPAREN
+
 constant_expression : logical_or_expression
-;
+
 logical_or_expression : logical_and_expression
                           | logical_or_expression OR logical_and_expression
-;
+
 logical_and_expression : equality_expression
                            | logical_and_expression AND equality_expression
-;
+
 equality_expression : relational_expression
                         | equality_expression EQUALS relational_expression
                         | equality_expression NEQUALS relational_expression
-;
+
 relational_expression : additive_expression
                           | relational_expression LT additive_expression
                           | relational_expression GT additive_expression
                           | relational_expression LTE additive_expression
                           | relational_expression GTE additive_expression
-;
+
 additive_expression : multiplicative_expression
                         | additive_expression PLUS multiplicative_expression
                         | additive_expression MINUS multiplicative_expression
-;
+
 multiplicative_expression : cast_expression
                               | multiplicative_expression MUL cast_expression
                               | multiplicative_expression DIV cast_expression
                               | multiplicative_expression MOD cast_expression
-;
+
 cast_expression : unary_expression
-                    | LPAREN type_name RPAREN cast_expression
-;
+                    |  LPAREN type_name RPAREN cast_expression
+
 unary_expression : postfix_expression
                      | DECR unary_expression
                      | INCR unary_expression
                      | unary_operator cast_expression
-;
+
 postfix_expression : primary_expression
-                       | postfix_expression [ expression ]
-                       | postfix_expression ( {assignment_expression}* )
-                       | postfix_expression COLON ID
+                       | postfix_expression LBOX expression RBOX
+                       | postfix_expression LPAREN {assignment_expression}* RPAREN
+                       | postfix_expression COLON identifier
                        | postfix_expression INCR
                        | postfix_expression DECR
-;
-primary_expression : ID
+
+primary_expression : identifier
                        | constant
+                       | string
                        | ( expression )
-;
+
 constant : INTLIT
-        |  CHARLIT
-        |  FLOATLIT
-        |  STRINGLIT
-        |  TRUE
-        |  FALSE
-;
+             | CHARLIT
+             | FLOATLIT
+             | STRINGLIT
+             | TRUE
+             | FALSE
+
 expression : assignment_expression
                | expression COMMA assignment_expression
-;
+
 assignment_expression : unary_expression assignment_operator assignment_expression
-;
+
 assignment_operator : ASSIGN
                         | MULEQUALS
                         | DIVEQUALS
                         | MODEQUALS
                         | PLUSEQUALS
                         | MINUSEQUALS
+
 unary_operator : MUL
                    | PLUS
                    | MINUS
                    | NOT
-;
+
 parameter_list : parameter_declaration
                    | parameter_list COMMA parameter_declaration
-;
+
 parameter_declaration : type_specifier declarator
-;
+                          | type_specifier
+
 declaration :  type_specifier {init_declarator}* SEMICOLON 
-;
+
 init_declarator : declarator
                     | declarator EQUALS initializer
-;
+
 initializer : assignment_expression
                 | { initializer_list }
                 | { initializer_list COMMA }
-;
+
 initializer_list : initializer
                      | initializer_list COMMA initializer
-;
+
 compound_statement : LBRACE { declaration }* { statement }* RBRACE
-;
+
 statement : expression_statement
               | compound_statement
               | selection_statement
               | iteration_statement
               | jump_statement
-;
+
 expression_statement : {expression}? SEMICOLON
-;
+
 selection_statement : IF ( expression ) statement
                         | IF ( expression ) statement ELSE statement
-;
+
 iteration_statement : { WITH LPAREN expression RPAREN }? LOOP { UNTIL LPAREN expression RPAREN }? { UPDATE LPAREN expression RPAREN }? 
                             LBRACE { statement }? RBRACE
-;
+
 jump_statement : SKIP SEMICOLON
                    | EXIT SEMICOLON
                    | RETURN {expression}? SEMICOLON
